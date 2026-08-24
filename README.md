@@ -11,6 +11,4 @@ I added an AI engagement analysis step to the brief: /api/analyze calls the Groq
 UX wise, I added loading states for the latency heavy OCR and LLM steps, a light/dark theme toggle with persistence, and try/catch boundaries across both API routes and the client to gracefully surface errors like unsupported files or missing keys.
 
 
-# Social Media Content Analyzer
-
 **Live Application:** [https://unthinkable-project-gamma.vercel.app/](https://unthinkable-project-gamma.vercel.app/)
