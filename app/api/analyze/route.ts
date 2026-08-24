@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     if (!apiKey) {
       console.error("GROQ_API_KEY is missing in environment variables.");
       return NextResponse.json(
-        { error: "API key is not configured in .env.local" },
+        { error: "API key is not configured. Set GROQ_API_KEY in your .env file." },
         { status: 500 }
       );
     }
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 }`;
 
     const completion = await groq.chat.completions.create({
-      model: "mixtral-8x7b-32768",
+      model: "openai/gpt-oss-20b",
       messages: [
         { role: "system", content: prompt },
         { role: "user", content: extractedText },
@@ -44,9 +44,9 @@ export async function POST(req: NextRequest) {
     });
 
     const content = completion.choices[0]?.message?.content || "{}";
-    const data = JSON.parse(content);
+    const analysis = JSON.parse(content);
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, analysis });
   } catch (err: any) {
     console.error("Groq API Detailed Error:", err);
     return NextResponse.json(

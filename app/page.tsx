@@ -77,10 +77,10 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-semibold tracking-tight text-neutral-900">
+        <h1 className="text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
           New Analysis
         </h1>
-        <p className="text-[13px] text-neutral-500">
+        <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
           Upload a document or image to extract text and generate engagement insights.
         </p>
       </div>
@@ -89,9 +89,9 @@ export default function Home() {
       <section className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 items-start">
         {/* Left Side: Input / Upload & Preview */}
         <div className="flex flex-col gap-4">
-          <div className="bg-white rounded-[12px] shadow-sm border border-neutral-200/60 overflow-hidden">
-            <div className="px-4 py-3 border-b border-neutral-100 bg-neutral-50/50 flex items-center justify-between">
-              <h2 className="text-[13px] font-medium text-neutral-700 flex items-center gap-2">
+          <div className="bg-white dark:bg-neutral-900 rounded-[12px] shadow-sm border border-neutral-200/60 dark:border-neutral-800 overflow-hidden">
+            <div className="px-4 py-3 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/30 flex items-center justify-between">
+              <h2 className="text-[13px] font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
                 Source File
               </h2>
             </div>
@@ -112,8 +112,8 @@ export default function Home() {
               disabled={isAnalyzing}
               className={`w-full flex items-center justify-center gap-2 text-[14px] font-medium py-2.5 px-4 rounded-[8px] transition-all ${
                 isAnalyzing
-                  ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed border border-neutral-200'
-                  : 'bg-neutral-900 hover:bg-neutral-800 text-white shadow-sm ring-1 ring-inset ring-neutral-900/10'
+                  ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed border border-neutral-200 dark:border-neutral-700'
+                  : 'bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 text-white dark:text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-900/10 dark:ring-white/10'
               }`}
             >
               {isAnalyzing ? (

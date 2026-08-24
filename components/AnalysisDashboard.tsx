@@ -28,16 +28,16 @@ interface AnalysisDashboardProps {
 
 const ScoreBar = ({ score }: { score: number }) => {
   let colorClass = "bg-emerald-500";
-  let textClass = "text-emerald-700";
+  let textClass = "text-emerald-700 dark:text-emerald-400";
   let label = "High Engagement";
   
   if (score <= 40) {
     colorClass = "bg-rose-500";
-    textClass = "text-rose-700";
+    textClass = "text-rose-700 dark:text-rose-400";
     label = "Needs Work";
   } else if (score <= 70) {
     colorClass = "bg-amber-500";
-    textClass = "text-amber-700";
+    textClass = "text-amber-700 dark:text-amber-400";
     label = "Moderate";
   }
 
@@ -45,9 +45,9 @@ const ScoreBar = ({ score }: { score: number }) => {
     <div className="flex flex-col gap-1.5 w-full sm:max-w-[200px]">
       <div className="flex items-end justify-between">
         <span className={`text-[12px] font-medium ${textClass}`}>{label}</span>
-        <span className="text-[13px] font-semibold text-neutral-900">{score}<span className="text-neutral-400 font-normal">/100</span></span>
+        <span className="text-[13px] font-semibold text-neutral-900 dark:text-neutral-100">{score}<span className="text-neutral-400 dark:text-neutral-500 font-normal">/100</span></span>
       </div>
-      <div className="h-1.5 w-full bg-neutral-200/60 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-neutral-200/60 dark:bg-neutral-700 rounded-full overflow-hidden">
         <div 
           className={`h-full ${colorClass} transition-all duration-1000 ease-out`} 
           style={{ width: `${score}%` }} 
@@ -68,12 +68,12 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
   if (!data) {
     return (
-      <div className="bg-white border border-neutral-200/60 rounded-[12px] shadow-sm h-full min-h-[600px] flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 bg-neutral-50 border border-neutral-200/60 rounded-[8px] flex items-center justify-center mb-4">
-          <BarChart3 className="w-5 h-5 text-neutral-400" />
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800 rounded-[12px] shadow-sm h-full min-h-[600px] flex flex-col items-center justify-center text-center">
+        <div className="w-12 h-12 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200/60 dark:border-neutral-700 rounded-[8px] flex items-center justify-center mb-4">
+          <BarChart3 className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
         </div>
-        <h3 className="text-[14px] font-medium text-neutral-900 mb-1">No Analysis Data</h3>
-        <p className="text-[13px] text-neutral-500 max-w-[250px] leading-relaxed">
+        <h3 className="text-[14px] font-medium text-neutral-900 dark:text-neutral-100 mb-1">No Analysis Data</h3>
+        <p className="text-[13px] text-neutral-500 dark:text-neutral-400 max-w-[250px] leading-relaxed">
           Run an analysis on your extracted text to view engagement insights.
         </p>
       </div>
@@ -81,16 +81,16 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
   }
 
   return (
-    <div className="bg-white border border-neutral-200/60 rounded-[12px] shadow-sm overflow-hidden h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-forwards">
+    <div className="bg-white dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800 rounded-[12px] shadow-sm overflow-hidden h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-forwards">
       
       {/* Header Overview */}
-      <div className="px-5 py-4 border-b border-neutral-100 bg-neutral-50/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <h2 className="text-[15px] font-semibold text-neutral-900 flex items-center gap-2">
+          <h2 className="text-[15px] font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             Analysis Results
           </h2>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-white border border-neutral-200 text-neutral-600 text-[11px] font-medium uppercase tracking-wider shadow-sm">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 text-[11px] font-medium uppercase tracking-wider shadow-sm">
               Tone: {data.tone}
             </span>
           </div>
@@ -108,8 +108,8 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
               Strengths
             </h3>
             <ul className="flex flex-col gap-2.5">
-              {data.strengths.map((strength, i) => (
-                <li key={i} className="text-[13px] text-neutral-700 leading-relaxed pl-3 border-l-[2px] border-emerald-500/40">
+              {(data.strengths ?? []).map((strength, i) => (
+                <li key={i} className="text-[13px] text-neutral-700 dark:text-neutral-300 leading-relaxed pl-3 border-l-[2px] border-emerald-500/40">
                   {strength}
                 </li>
               ))}
@@ -122,8 +122,8 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
               Weaknesses
             </h3>
             <ul className="flex flex-col gap-2.5">
-              {data.weaknesses.map((weakness, i) => (
-                <li key={i} className="text-[13px] text-neutral-700 leading-relaxed pl-3 border-l-[2px] border-amber-500/40">
+              {(data.weaknesses ?? []).map((weakness, i) => (
+                <li key={i} className="text-[13px] text-neutral-700 dark:text-neutral-300 leading-relaxed pl-3 border-l-[2px] border-amber-500/40">
                   {weakness}
                 </li>
               ))}
@@ -131,7 +131,7 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
           </div>
         </div>
 
-        <div className="w-full h-px bg-neutral-100" />
+        <div className="w-full h-px bg-neutral-100 dark:bg-neutral-800" />
 
         {/* Recommendations */}
         <div className="flex flex-col gap-3">
@@ -140,16 +140,16 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             Actionable Steps
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {data.improvementSuggestions.map((suggestion, i) => (
-              <div key={i} className="bg-neutral-50/50 border border-neutral-200/60 p-3 rounded-[8px] flex items-start gap-2.5">
-                <span className="text-[11px] font-mono text-neutral-400 mt-0.5">{i + 1}.</span>
-                <p className="text-[13px] text-neutral-700 leading-relaxed">{suggestion}</p>
+            {(data.improvementSuggestions ?? []).map((suggestion, i) => (
+              <div key={i} className="bg-neutral-50/50 dark:bg-neutral-800/40 border border-neutral-200/60 dark:border-neutral-700 p-3 rounded-[8px] flex items-start gap-2.5">
+                <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500 mt-0.5">{i + 1}.</span>
+                <p className="text-[13px] text-neutral-700 dark:text-neutral-300 leading-relaxed">{suggestion}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="w-full h-px bg-neutral-100" />
+        <div className="w-full h-px bg-neutral-100 dark:bg-neutral-800" />
 
         {/* Optimized Rewrite */}
         <div className="flex flex-col gap-3">
@@ -160,22 +160,22 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             </h3>
             <button
               onClick={() => handleCopy(data.optimizedVersion)}
-              className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-[4px] transition-colors"
+              className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-[4px] transition-colors"
             >
               {copied ? (
                 <>
-                  <Check className="w-3 h-3 text-neutral-900" />
+                  <Check className="w-3 h-3 text-neutral-900 dark:text-neutral-100" />
                   <span>Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3 h-3 text-neutral-500" />
+                  <Copy className="w-3 h-3 text-neutral-500 dark:text-neutral-400" />
                   <span>Copy</span>
                 </>
               )}
             </button>
           </div>
-          <div className="bg-neutral-900 rounded-[8px] p-4 text-[13px] text-neutral-300 font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto shadow-inner">
+          <div className="bg-neutral-900 dark:bg-neutral-950 dark:border dark:border-neutral-800 rounded-[8px] p-4 text-[13px] text-neutral-300 font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto shadow-inner">
             {data.optimizedVersion}
           </div>
         </div>
@@ -188,9 +188,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                 <button
                   key={i}
                   onClick={() => handleCopy(tag)}
-                  className="px-2 py-1 bg-white border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 text-neutral-600 text-[11px] font-medium rounded-[4px] transition-colors flex items-center gap-1 shadow-sm"
+                  className="px-2 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-300 text-[11px] font-medium rounded-[4px] transition-colors flex items-center gap-1 shadow-sm"
                 >
-                  <Hash className="w-3 h-3 text-neutral-400" />
+                  <Hash className="w-3 h-3 text-neutral-400 dark:text-neutral-500" />
                   {tag.replace('#', '')}
                 </button>
               ))}

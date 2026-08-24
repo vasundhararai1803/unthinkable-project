@@ -1,27 +1,27 @@
 # Social Media Content Analyzer
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=flat&logo=tailwind-css)
-![Gemini AI](https://img.shields.io/badge/AI-Google_Gemini-orange?style=flat)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat&logo=tailwind-css)
+![Groq](https://img.shields.io/badge/AI-Groq-orange?style=flat)
 
-**Social Media Content Analyzer** is a modern, AI-powered web application designed to help creators and marketers extract text from documents or images and instantly receive actionable engagement insights to supercharge their social media strategy.
+**Social Media Content Analyzer** is an AI-powered web application that extracts text from documents or images and returns actionable engagement insights to help improve social media posts.
 
-## 🚀 Core Technical Architecture
+## Core Technical Architecture
 
-- **Framework**: Next.js 14 (App Router) with TypeScript for robust, full-stack React development.
-- **Styling**: Tailwind CSS combined with `lucide-react` for a responsive, modern, and highly polished UI.
-- **Document Extraction Pipeline**: 
-  - `pdf-parse`: High-speed vector parsing for `.pdf` documents.
+- **Framework**: Next.js 16 (App Router) with TypeScript.
+- **Styling**: Tailwind CSS v4 with `lucide-react` icons. Supports light and dark themes.
+- **Document Extraction Pipeline**:
+  - `pdf-parse`: text extraction for `.pdf` documents.
   - `tesseract.js`: Optical Character Recognition (OCR) for `.png`, `.jpg`, and `.jpeg` images.
-- **AI Engine:** Groq API (`groq-sdk`) using `llama-3.1-8b-instant` for ultra-fast, structured JSON sentiment and engagement scoring.
+- **AI Engine**: Groq API (`groq-sdk`) using the `openai/gpt-oss-20b` model with JSON mode for structured engagement scoring.
 
 ---
 
-## 🛠️ Local Setup Instructions
+## Local Setup Instructions
 
 ### Prerequisites
-- Node.js 18.x or later installed on your machine.
+- Node.js 18.x or later.
 - A valid [Groq API Key](https://console.groq.com/keys).
 
 ### Installation Steps
@@ -29,34 +29,38 @@
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd UNTHINKABLE
+   cd <project-directory>
    ```
 
 2. **Install dependencies**
-   1. Ensure you have Node.js 18+ installed.
-   2. Clone this repository and navigate to the root directory.
-   3. Install dependencies: `npm install`
-   4. Copy the `.env.local` template and add your API keys:
-      - Provide your `GROQ_API_KEY` in `.env.local`.
-   5. Start the development server: `npm run dev`
+   ```bash
+   npm install
+   ```
 
-3. **Run the Development Server**
+3. **Configure environment variables**
+
+   Create a `.env` file in the project root and add your Groq API key:
+   ```
+   GROQ_API_KEY=your_key_here
+   ```
+
+4. **Run the development server**
    ```bash
    npm run dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+   Open [http://localhost:3000](http://localhost:3000) (or the port shown in the terminal) to view the application.
 
 ---
 
-## 🌍 Deployment Guide
+## Deployment Guide
 
-This project is optimized for modern serverless environments.
+This project runs on modern serverless environments.
 
 ### Vercel (Recommended)
 1. Push your code to a GitHub/GitLab/Bitbucket repository.
 2. Import the project into [Vercel](https://vercel.com/).
 3. Add your `GROQ_API_KEY` to the **Environment Variables** in the Vercel project settings.
-4. Click **Deploy**. Vercel will automatically detect the Next.js framework and build the app.
+4. Click **Deploy**. Vercel automatically detects the Next.js framework.
 
 ### Render
 1. Connect your repository to [Render](https://render.com/).
@@ -66,10 +70,10 @@ This project is optimized for modern serverless environments.
 
 ---
 
-## 🧠 Technical Approach
+## Technical Approach
 
-The technical architecture centers around a Next.js 14 App Router, keeping the frontend interactive while safely handling API keys server-side. For document extraction, the application dynamically handles both vector-based PDFs (using `pdf-parse`) and image-based text (using `tesseract.js` OCR) in a unified `/api/extract-text` endpoint. 
+The application is built on the Next.js App Router, keeping the UI interactive on the client while handling the API key securely on the server. Document extraction is unified in a single `/api/extract-text` endpoint that branches by MIME type: vector-based PDFs are parsed with `pdf-parse`, while image files are run through `tesseract.js` OCR.
 
-The core intelligence is powered by the **Groq API** via the `/api/analyze` endpoint. By strictly enforcing a JSON response schema (`response_format: { type: 'json_object' }`), we guarantee that the `llama-3.1-8b-instant` model returns structured, predictable data that perfectly maps to the TypeScript interfaces powering the `AnalysisDashboard` component. This architecture ensures high-speed insights while maintaining a robust, type-safe data pipeline from the server down to the UI components.
+The engagement analysis runs in `/api/analyze` against the Groq API. By enforcing a JSON response schema (`response_format: { type: 'json_object' }`), the `openai/gpt-oss-20b` model returns structured, predictable data that maps directly to the TypeScript interfaces powering the `AnalysisDashboard` component, giving a type-safe pipeline from server to UI.
 
-UX is prioritized through a responsive, modern App Router interface built with Tailwind CSS. Stateful loading indicators bridge the gap during latency-heavy tasks (like OCR processing or LLM generation). Furthermore, comprehensive try/catch boundaries gracefully handle edge cases—such as corrupted files or API rate limits—ensuring a resilient and intuitive user experience at all times.
+UX is handled through a responsive interface with light/dark theme support. Stateful loading indicators cover latency-heavy tasks such as OCR and LLM generation, and try/catch boundaries in both API routes and the client gracefully surface errors like unsupported files or missing API keys.
