@@ -1,74 +1,57 @@
-import { NextResponse } from 'next/server';
-import Groq from 'groq-sdk';
+import { NextRequest, NextResponse } from "next/server";
+import Groq from "groq-sdk";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || '' });
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { extractedText } = body;
-
-    if (!extractedText || typeof extractedText !== 'string' || extractedText.trim() === '') {
-      return NextResponse.json({ success: false, error: 'extractedText is required and must not be empty' }, { status: 400 });
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      console.error("GROQ_API_KEY is missing in environment variables.");
+      return NextResponse.json(
+        { error: "API key is not configured in .env.local" },
+        { status: 500 }
+      );
     }
 
-    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === 'your_groq_api_key_here') {
-      return NextResponse.json({ success: false, error: 'Missing or invalid GROQ_API_KEY in .env.local' }, { status: 401 });
+    const groq = new Groq({ apiKey });
+    const { extractedText } = await req.json();
+
+    if (!extractedText) {
+      return NextResponse.json(
+        { error: "Extracted text is missing" },
+        { status: 400 }
+      );
     }
 
-    const prompt = `You are an expert Social Media Content Analyst. Analyze the following text and return a JSON object with this exact shape, containing actionable insights for social media:
+    const prompt = `You are a social media analyzer. Analyze this text and return valid raw JSON matching this format:
 {
-  "engagementScore": number (1-100),
-  "tone": string,
-  "strengths": string[],
-  "weaknesses": string[],
-  "improvementSuggestions": string[],
-  "suggestedHashtags": string[],
-  "optimizedVersion": string
-}
+  "engagementScore": 85,
+  "tone": "Professional",
+  "strengths": ["Clear CTA", "Good layout"],
+  "weaknesses": ["Needs hashtags"],
+  "improvementSuggestions": ["Add relevant tags"],
+  "suggestedHashtags": ["#tech", "#software"],
+  "optimizedVersion": "Better version here"
+}`;
 
-You MUST return a raw JSON object containing: engagementScore, tone, strengths, weaknesses, improvementSuggestions, suggestedHashtags, and optimizedVersion. Do NOT include markdown code blocks (\`\`\`json).
-
-Text to analyze:
-"${extractedText}"`;
-
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      model: 'llama3-8b-8192',
-      response_format: { type: 'json_object' },
+    const completion = await groq.chat.completions.create({
+      model: "mixtral-8x7b-32768",
+      messages: [
+        { role: "system", content: prompt },
+        { role: "user", content: extractedText },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.2,
     });
 
-    const responseText = chatCompletion.choices[0]?.message?.content;
-    
-    if (!responseText) {
-      throw new Error("No response text returned from Groq");
-    }
+    const content = completion.choices[0]?.message?.content || "{}";
+    const data = JSON.parse(content);
 
-    let parsedData;
-    try {
-      parsedData = JSON.parse(responseText);
-    } catch (parseError) {
-      // Fallback: strip potential backticks before parsing
-      const cleanedText = responseText.replace(/```json|```/g, "").trim();
-      parsedData = JSON.parse(cleanedText);
-    }
-
-    return NextResponse.json({
-      success: true,
-      analysis: parsedData
-    });
-  } catch (error: any) {
-    console.error('Analysis error:', error);
-    
-    // Handle specific API errors
-    if (error.status === 429) {
-      return NextResponse.json({ success: false, error: 'Rate limit exceeded. Please try again later.' }, { status: 429 });
-    }
-    
-    if (error.status === 401 || (error.message && error.message.toLowerCase().includes('api key'))) {
-      return NextResponse.json({ success: false, error: 'Invalid or missing API key.' }, { status: 401 });
-    }
-
-    return NextResponse.json({ success: false, error: error.message || 'Failed to analyze content' }, { status: 500 });
+    return NextResponse.json(data);
+  } catch (err: any) {
+    console.error("Groq API Detailed Error:", err);
+    return NextResponse.json(
+      { error: err.message || "Failed to analyze" },
+      { status: 500 }
+    );
   }
 }
