@@ -75,7 +75,7 @@ GROQ_API_KEY=your_groq_api_key_here
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [Social Media Analyser](https://unthinkable-project-gamma.vercel.app/) in your browser.
 
 ### Other scripts
 
