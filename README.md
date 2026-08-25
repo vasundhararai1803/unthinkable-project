@@ -14,9 +14,7 @@ UX wise, I added loading states for the latency heavy OCR and LLM steps, a light
 **Live Application:** [https://unthinkable-project-gamma.vercel.app/](https://unthinkable-project-gamma.vercel.app/)
 
 
-A full-stack web app that extracts text from PDFs and images (via OCR) and uses an LLM to score and improve the content for social media engagement. Upload a post draft, screenshot, or flyer, and get back an engagement score, tone analysis, strengths/weaknesses, hashtag suggestions, and an optimized rewrite.
 
-Built with Next.js 16 (App Router) and TypeScript.
 
 ## Features
 
